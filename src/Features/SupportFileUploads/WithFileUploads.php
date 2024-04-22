@@ -36,6 +36,10 @@ trait WithFileUploads
                 return TemporaryUploadedFile::createFromLivewire($i);
             })->toArray();
             $this->dispatch('upload:finished', name: $name, tmpFilenames: collect($file)->map->getFilename()->toArray())->self();
+
+            if (is_array($value = $this->getPropertyValue($name))) {
+                $file = array_merge($value, $file);
+            }
         } else {
             $file = TemporaryUploadedFile::createFromLivewire($tmpPath[0]);
             $this->dispatch('upload:finished', name: $name, tmpFilenames: [$file->getFilename()])->self();
